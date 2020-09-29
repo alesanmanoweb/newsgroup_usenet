@@ -4,7 +4,7 @@ import 'server_edit.dart';
 
 void main() => runApp(MaterialApp(
   theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
+        primarySwatch: Colors.teal,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
   routes: {
