@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'server_list.dart';
 import 'server_edit.dart';
+import 'group_list.dart';
 
 void main() => runApp(MaterialApp(
   theme: ThemeData(
@@ -10,5 +11,6 @@ void main() => runApp(MaterialApp(
   routes: {
     '/': (context) => ServerList(),
     '/server_edit': (context) => ServerEdit(),
+    '/group_list': (context) => GroupList(),
   },
 ));
