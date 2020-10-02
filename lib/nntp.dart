@@ -13,15 +13,17 @@ class NNTPServer {
 
   List<NNTPGroup> _groupList;
   Completer _completer;
+  Socket _socket;
 
   Future requestGroupList() async {
     count = 0;
     _groupList = List<NNTPGroup>();
     _completer = Completer();
     Socket.connect(hostname, port).then((socket) {
-      print('Connected to: ${socket.remoteAddress.address}:${socket.remotePort}');
-      socket.cast<List<int>>().transform(utf8.decoder).transform(LineSplitter()).listen(_receiveGroupList, onError: _errorHandler);
-      socket.writeln('LIST ACTIVE');
+      _socket = socket;
+      print('Connected to: ${_socket.remoteAddress.address}:${_socket.remotePort}');
+      _socket.cast<List<int>>().transform(utf8.decoder).transform(LineSplitter()).listen(_receiveGroupList, onError: _errorHandler);
+      _socket.writeln('LIST ACTIVE');
     });
     return _completer.future;
   }
@@ -30,14 +32,18 @@ class NNTPServer {
     count++;
     if(count <= 2)
       return; // skipping response headers
-    if(count < 10){ print('receiveList: $line');}
     if(line == '.') { // end of response
       print('Received $count groups.');
       _completer.complete(_groupList);
+      _socket.destroy(); // excessive?
+      return;
     }
-    // List<String> groupInfo = line.split(' ');
-    // _groupList.add(NNTPGroup(groupInfo[0], int.tryParse(groupInfo[1]), int.tryParse(groupInfo[2])));
-    _groupList.add(NNTPGroup(line, 0, 1));
+    List<String> groupInfo = line.split(' ');
+    if(groupInfo.length != 4) {
+      print('Len not 4 - $line');
+      return;
+    }
+    _groupList.add(NNTPGroup(groupInfo[0], int.tryParse(groupInfo[1]), int.tryParse(groupInfo[2])));
   }
 
   void _errorHandler(error) {
