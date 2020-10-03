@@ -22,8 +22,10 @@ class _ServerListState extends State<ServerList> {
   Widget _serverCard(NNTPServer server) {
     return GestureDetector(
         onTap: () {
-            Navigator.pushNamed(context, '/group_list', arguments: server);
-          },
+          Navigator.pushNamed(context, '/group_list', arguments: {
+            'server': server,
+          });
+        },
         child: Card(
           margin: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
           child: Padding(
@@ -35,8 +37,7 @@ class _ServerListState extends State<ServerList> {
                   color: Colors.grey[600],
                 ),
               )),
-        )
-    );
+        ));
   }
 
   @override

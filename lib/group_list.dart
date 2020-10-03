@@ -12,6 +12,7 @@ class _GroupListState extends State<GroupList> {
   Future _futureGroup;
   List<NNTPGroup> _groupList;
   List<NNTPGroup> _filteredGroupList;
+  Map _arguments;
 
   String _formatGroup(NNTPGroup g) {
     int n = g.a1 - g.a2;
@@ -24,14 +25,13 @@ class _GroupListState extends State<GroupList> {
   @override
   Widget build(BuildContext context) {
     if (_server == null) {
-      print('************************** Requesting list');
-      _server = ModalRoute.of(context).settings.arguments;
+      _arguments = ModalRoute.of(context).settings.arguments;
+      _server = _arguments['server'];
       _futureGroup = _server.requestGroupList();
     }
-    print('*********************************************************** build');
     return Scaffold(
         appBar: AppBar(
-          title: Text('Group List'),
+          title: Text(_server.hostname),
         ),
         body: Column(
           children: [
@@ -72,10 +72,16 @@ class _GroupListState extends State<GroupList> {
                       itemCount: _filteredGroupList.length,
                       itemBuilder: (context, index) {
                         return ListTile(
-                          title: Text(_filteredGroupList[index].name),
-                          subtitle:
-                              Text(_formatGroup(_filteredGroupList[index])),
-                        );
+                            title: Text(_filteredGroupList[index].name),
+                            subtitle:
+                                Text(_formatGroup(_filteredGroupList[index])),
+                            onTap: () {
+                              Navigator.pushNamed(context, '/message_list',
+                                  arguments: {
+                                    'server': _server,
+                                    'group': _filteredGroupList[index],
+                                  });
+                            });
                       });
                 },
               ),
