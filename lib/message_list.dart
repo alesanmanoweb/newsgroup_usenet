@@ -75,10 +75,12 @@ class _MessageListState extends State<MessageList> {
                                 subtitle: Text(_formatMessage(
                                     _filteredMessageList[index])),
                                 onTap: () {
-                                  // Navigator.pushNamed(context, '/message_list',
-                                  //     arguments: {
-                                  //       'server': _server,
-                                  //       'group': _filteredGroupList[index],
+                                  Navigator.pushNamed(context, '/message',
+                                      arguments: {
+                                        'server': _server,
+                                        'group': _group,
+                                        'message': _filteredMessageList[index],
+                                      });
                                 });
                           });
                     })),

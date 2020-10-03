@@ -3,6 +3,7 @@ import 'server_list.dart';
 import 'server_edit.dart';
 import 'group_list.dart';
 import 'message_list.dart';
+import 'message.dart';
 
 void main() => runApp(MaterialApp(
   theme: ThemeData(
@@ -14,5 +15,6 @@ void main() => runApp(MaterialApp(
     '/server_edit': (context) => ServerEdit(),
     '/group_list': (context) => GroupList(),
     '/message_list': (context) => MessageList(),
+    '/message': (context) => Message(),
   },
 ));
